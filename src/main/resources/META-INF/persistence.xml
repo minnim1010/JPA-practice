@@ -4,6 +4,9 @@
     <persistence-unit name="jpabook">
 
         <class>jpa.entity.Member</class>
+        <class>jpa.entity.Order</class>
+        <class>jpa.entity.OrderItem</class>
+        <class>jpa.entity.Item</class>
 
         <properties>
 
