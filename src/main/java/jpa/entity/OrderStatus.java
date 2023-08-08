@@ -1,5 +1,15 @@
 package jpa.entity;
 
 public enum OrderStatus {
-    ORDER, CANCEL
+    ORDER {
+        @Override
+        public String toString(){
+            return "ORDER";
+        }
+    }, CANCEL{
+        @Override
+        public String toString(){
+            return "CANCEL";
+        }
+    }
 }

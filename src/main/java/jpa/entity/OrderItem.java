@@ -1,19 +1,20 @@
 package jpa.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 
 @Entity
+@Table(name="ORDER_ITEM")
 public class OrderItem {
     @Id @GeneratedValue
     @Column(name="ORDER_ITEM_ID")
     private Long id;
-    @Column(name="ORDER_ID")
-    private Long OrderId;
-    @Column(name="ITEM_ID")
-    private Long ItemId;
+    @ManyToOne
+    @JoinColumn(name="ORDER_ID")
+    private Order order;
+    @ManyToOne
+    @JoinColumn(name="ITEM_ID")
+    private Item item;
     private int orderPrice;
     private int count;
 
@@ -21,20 +22,20 @@ public class OrderItem {
         return id;
     }
 
-    public Long getOrderId() {
-        return OrderId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderId(Long orderId) {
-        OrderId = orderId;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
-    public Long getItemId() {
-        return ItemId;
+    public Item getItem() {
+        return item;
     }
 
-    public void setItemId(Long itemId) {
-        ItemId = itemId;
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     public int getOrderPrice() {
@@ -51,5 +52,15 @@ public class OrderItem {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", item=" + item +
+                ", orderPrice=" + orderPrice +
+                ", count=" + count +
+                '}';
     }
 }
