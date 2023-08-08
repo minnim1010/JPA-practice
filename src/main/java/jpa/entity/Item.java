@@ -1,17 +1,17 @@
 package jpa.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 상품에서 주문 상품을 조회할 일이 거의 없으므로 다대일 단방향 관계로 설정
  */
 @Entity
 public class Item {
-    @Id @GeneratedValue
-    @Column(name="ITEM_ID")
+    @Id
+    @GeneratedValue
+    @Column(name = "ITEM_ID")
     private Long id;
 
     private String name;
@@ -19,6 +19,9 @@ public class Item {
     private int price;
 
     private int stockQuantity;
+
+    @ManyToMany(mappedBy = "items")
+    private List<Category> category = new ArrayList<>();
 
     public Long getId() {
         return id;

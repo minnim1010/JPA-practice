@@ -20,7 +20,11 @@ public class Order {
     private Date orderDate;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-
+    // 1대1 관계이지만, 주문 -> 배송 접근이 잦으므로 외래키는 여기에 두었음.
+    @OneToOne
+    @Column(unique = true)
+    @JoinColumn(name="DELIVERY_ID")
+    private Delivery delivery;
 
     public Long getId() {
         return id;
@@ -65,6 +69,15 @@ public class Order {
     public void addOrderItem(OrderItem orderItem){
         this.getOrderItems().add(orderItem);
         orderItem.setOrder(this);
+    }
+
+    public Delivery getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+        delivery.setOrder(this);
     }
 
     @Override
