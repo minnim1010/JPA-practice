@@ -6,7 +6,13 @@
         <class>jpa.entity.Member</class>
         <class>jpa.entity.Order</class>
         <class>jpa.entity.OrderItem</class>
-        <class>jpa.entity.Item</class>
+        <class>jpa.entity.Category</class>
+        <class>jpa.entity.Delivery</class>
+        <class>jpa.entity.item.Item</class>
+        <class>jpa.entity.item.Album</class>
+        <class>jpa.entity.item.Book</class>
+        <class>jpa.entity.item.Movie</class>
+
 
         <properties>
 

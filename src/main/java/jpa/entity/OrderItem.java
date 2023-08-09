@@ -1,5 +1,7 @@
 package jpa.entity;
 
+import jpa.entity.item.Item;
+
 import javax.persistence.*;
 
 

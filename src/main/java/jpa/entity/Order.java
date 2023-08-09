@@ -1,13 +1,16 @@
 package jpa.entity;
 
+import jpa.entity.base.BaseEntity;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 @Entity
 @Table(name="ORDERS")
-public class Order {
+public class Order extends BaseEntity {
     @Id @GeneratedValue
     @Column(name="ORDER_ID")
     private Long id;
@@ -22,7 +25,6 @@ public class Order {
     private OrderStatus status;
     // 1대1 관계이지만, 주문 -> 배송 접근이 잦으므로 외래키는 여기에 두었음.
     @OneToOne
-    @Column(unique = true)
     @JoinColumn(name="DELIVERY_ID")
     private Delivery delivery;
 

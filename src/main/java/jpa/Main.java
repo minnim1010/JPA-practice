@@ -1,6 +1,7 @@
 package jpa;
 
 import jpa.entity.*;
+import jpa.entity.item.Item;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
