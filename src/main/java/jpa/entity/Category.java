@@ -1,12 +1,16 @@
 package jpa.entity;
 
 import jpa.entity.item.Item;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class Category {
     @Id
     @GeneratedValue
@@ -35,24 +39,8 @@ public class Category {
         items.add(item);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public Category getParent() {
-        return parent;
     }
 
     public void setParent(Category parent) {
@@ -61,10 +49,6 @@ public class Category {
 
     public void setItems(List<Item> items) {
         this.items = items;
-    }
-
-    public List<Category> getChild() {
-        return child;
     }
 
     public void setChild(List<Category> child) {

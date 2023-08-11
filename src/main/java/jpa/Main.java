@@ -46,29 +46,16 @@ public class Main {
         member.setName("mj");
         em.persist(member);
 
-        Item apple = new Item();
-        apple.setName("apple");
-        apple.setPrice(1000);
-        apple.setStockQuantity(100);
+        Item apple = createItem("apple", 1000, 100);
         em.persist(apple);
-
-        Item candy = new Item();
-        candy.setName("candy");
-        candy.setPrice(200);
-        candy.setStockQuantity(1000);
+        Item candy = createItem("candy", 200, 1000);
         em.persist(candy);
 
-        OrderItem orderItem1 = new OrderItem();
-        orderItem1.setItem(apple);
-        orderItem1.setCount(2);
-        orderItem1.setOrderPrice(orderItem1.getItem().getPrice() * orderItem1.getCount());
-        em.persist(orderItem1);
+        OrderItem orderItem1 = createOrderItem(apple, 2);
+//        em.persist(orderItem1);
 
-        OrderItem orderItem2 = new OrderItem();
-        orderItem2.setItem(candy);
-        orderItem2.setCount(10);
-        orderItem2.setOrderPrice(orderItem2.getItem().getPrice() * orderItem2.getCount());
-        em.persist(orderItem2);
+        OrderItem orderItem2 = createOrderItem(candy, 10);
+//        em.persist(orderItem2);
 
         Order order = new Order();
         order.setMember(member);
@@ -77,6 +64,22 @@ public class Main {
         order.addOrderItem(orderItem2);
         order.setStatus(Enum.valueOf(OrderStatus.class, "ORDER"));
         em.persist(order);
+    }
+
+    static private Item createItem(String name, int price, int quantity){
+        Item apple = new Item();
+        apple.setName(name);
+        apple.setPrice(price);
+        apple.setStockQuantity(quantity);
+        return apple;
+    }
+
+    static private OrderItem createOrderItem(Item item, int count){
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setCount(count);
+        orderItem.setOrderPrice(item.getPrice() * count);
+        return orderItem;
     }
 
 }

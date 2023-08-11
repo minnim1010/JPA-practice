@@ -14,17 +14,17 @@ public class Order extends BaseEntity {
     @Id @GeneratedValue
     @Column(name="ORDER_ID")
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBER_ID")
     private Member member;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> OrderItems = new ArrayList<>();
     @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
     // 1대1 관계이지만, 주문 -> 배송 접근이 잦으므로 외래키는 여기에 두었음.
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="DELIVERY_ID")
     private Delivery delivery;
 
