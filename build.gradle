@@ -10,12 +10,25 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.projectlombok:lombok:1.18.28'
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    //lombok
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
 
+    testCompileOnly 'org.projectlombok:lombok:1.18.28'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+
+    // h2
     implementation "com.h2database:h2:2.1.214"
-    implementation 'org.hibernate:hibernate-entitymanager:6.0.0.Alpha7'
+
+    // hibernate
+    implementation 'org.hibernate:hibernate-entitymanager:5.6.11.Final'
+
+    // junit5
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    // assertj
+    testImplementation "org.assertj:assertj-core:3.22.0"
 }
 
 test {

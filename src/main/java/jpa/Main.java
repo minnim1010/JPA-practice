@@ -1,6 +1,9 @@
 package jpa;
 
-import jpa.entity.*;
+import jpa.entity.Member;
+import jpa.entity.Order;
+import jpa.entity.OrderItem;
+import jpa.entity.OrderStatus;
 import jpa.entity.item.Item;
 
 import javax.persistence.EntityManager;
@@ -12,18 +15,18 @@ import java.util.Date;
 public class Main {
 
     static EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("jpaexample");
+        Persistence.createEntityManagerFactory("jpaexample");
     static EntityManager em = emf.createEntityManager();
 
 
     public static void main(String[] args) {
         EntityTransaction tx = em.getTransaction();
 
-        try{
+        try {
             tx.begin();
             logic();
             tx.commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -31,7 +34,7 @@ public class Main {
         emf.close();
     }
 
-    static private void logic(){
+    static private void logic() {
         initialLogic();
         Long orderId = 1L;
         Order order = em.find(Order.class, orderId);
@@ -41,9 +44,10 @@ public class Main {
         System.out.println(member.toString());
     }
 
-    static private void initialLogic(){
-        Member member = new Member();
-        member.setName("mj");
+    static private void initialLogic() {
+        Member member = Member.builder()
+            .name("mj")
+            .build();
         em.persist(member);
 
         Item apple = createItem("apple", 1000, 100);
@@ -66,7 +70,7 @@ public class Main {
         em.persist(order);
     }
 
-    static private Item createItem(String name, int price, int quantity){
+    static private Item createItem(String name, int price, int quantity) {
         Item apple = new Item();
         apple.setName(name);
         apple.setPrice(price);
@@ -74,7 +78,7 @@ public class Main {
         return apple;
     }
 
-    static private OrderItem createOrderItem(Item item, int count){
+    static private OrderItem createOrderItem(Item item, int count) {
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
         orderItem.setCount(count);

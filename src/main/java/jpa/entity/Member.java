@@ -1,11 +1,16 @@
 package jpa.entity;
 
 import jpa.entity.base.BaseEntity;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@Getter
 @Entity
 public class Member extends BaseEntity {
     @Id @GeneratedValue
@@ -17,32 +22,14 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
+    @Builder
+    private Member(String name, Address address) {
+        this.name = name;
         this.address = address;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 
     @Override

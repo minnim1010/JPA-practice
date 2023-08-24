@@ -1,14 +1,16 @@
 package jpa.entity.item;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-@DiscriminatorValue("B")
 @Getter
-@Setter
+@SuperBuilder
+@NoArgsConstructor
+@DiscriminatorValue("B")
 @Entity
 public class Book extends Item{
     private String author;
