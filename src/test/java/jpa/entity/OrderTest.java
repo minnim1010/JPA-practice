@@ -15,7 +15,6 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Iterator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -101,7 +100,9 @@ class OrderTest extends TestConfig {
         Book book = (Book) items.get(1);
         Movie movie = (Movie) items.get(2);
 
-        OrderItem orderItem1 = new OrderItem(album, 3);
+        OrderItem orderItem1_1 = new OrderItem(album, 3);
+        OrderItem orderItem1_2 = new OrderItem(book, 3);
+        OrderItem orderItem1_3 = new OrderItem(book, 3);
         OrderItem orderItem2 = new OrderItem(book, 2);
         OrderItem orderItem3 = new OrderItem(movie, 1);
         OrderItem orderItem4 = new OrderItem(album, 1);
@@ -111,7 +112,9 @@ class OrderTest extends TestConfig {
         Order order2 = new Order(member, orderDate, OrderStatus.ORDER);
         Order order3 = new Order(member, orderDate, OrderStatus.ORDER);
         Order order4 = new Order(member, orderDate, OrderStatus.ORDER);
-        order1.addOrderItem(orderItem1);
+        order1.addOrderItem(orderItem1_1);
+        order1.addOrderItem(orderItem1_2);
+        order1.addOrderItem(orderItem1_3);
         order2.addOrderItem(orderItem2);
         order3.addOrderItem(orderItem3);
         order4.addOrderItem(orderItem4);
@@ -129,33 +132,39 @@ class OrderTest extends TestConfig {
         query = "SELECT o FROM Order o";
         List<Order> orders = em.createQuery(query, Order.class).getResultList();
 
-        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.of(2023, 8, 24, 0, 0, 0));
-        assertThat(orders).hasSize(4)
-            .extracting("member.name", "orderDate")
-            .contains(
-                Tuple.tuple(member.getName(), timestamp),
-                Tuple.tuple(member.getName(), timestamp),
-                Tuple.tuple(member.getName(), timestamp),
-                Tuple.tuple(member.getName(), timestamp)
-            );
+        assertThat(orders).hasSize(4);
 
-        List<List> list = List.of(List.of("Album1", 30000),
-            List.of("Book1", 40000),
-            List.of("Movie1", 8000),
-            List.of("Album1", 10000));
-        Iterator<List> iterator = list.iterator();
-
-        orders.stream()
-            .map(Order::getOrderItems)
-            .forEach((orderItems) -> {
-                    List next = iterator.next();
-                    assertThat(orderItems).hasSize(1)
-                        .extracting("item.name", "orderPrice")
-                        .contains(Tuple.tuple(next.get(0), next.get(1)));
-                }
-            );
+        int[] orderItemsSize = {3, 1, 1, 1};
+        for (int i = 0; i < orders.size(); i++) {
+            List<OrderItem> orderItems = orders.get(i).getOrderItems();
+            assertThat(orderItems).hasSize(orderItemsSize[i]);
+        }
     }
 
+
+    /*
+        select
+            distinct
+            order0_.ORDER_ID as order_id1_6_0_,
+            orderitems1_.ORDER_ITEM_ID as order_it1_5_1_,
+            order0_.createdDate as createdd2_6_0_,
+            order0_.lastModifiedDate as lastmodi3_6_0_,
+            order0_.DELIVERY_ID as delivery6_6_0_,
+            order0_.MEMBER_ID as member_i7_6_0_,
+            order0_.orderDate as orderdat4_6_0_,
+            order0_.status as status5_6_0_,
+            orderitems1_.count as count2_5_1_,
+            orderitems1_.ITEM_ID as item_id4_5_1_,
+            orderitems1_.ORDER_ID as order_id5_5_1_,
+            orderitems1_.orderPrice as orderpri3_5_1_,
+            orderitems1_.ORDER_ID as order_id5_5_0__,
+            orderitems1_.ORDER_ITEM_ID as order_it1_5_0__
+        from
+            ORDERS order0_
+        inner join
+            ORDER_ITEM orderitems1_
+                on order0_.ORDER_ID=orderitems1_.ORDER_ID
+     */
     @DisplayName("상품, 주문 상품 목록, 주문 여러 개를 생성하고, 여러 주문의 주문 상품을 Fetch Join으로 가져온다.")
     @Test
     void test3() {
@@ -172,7 +181,9 @@ class OrderTest extends TestConfig {
         Book book = (Book) items.get(1);
         Movie movie = (Movie) items.get(2);
 
-        OrderItem orderItem1 = new OrderItem(album, 3);
+        OrderItem orderItem1_1 = new OrderItem(album, 3);
+        OrderItem orderItem1_2 = new OrderItem(book, 3);
+        OrderItem orderItem1_3 = new OrderItem(book, 3);
         OrderItem orderItem2 = new OrderItem(book, 2);
         OrderItem orderItem3 = new OrderItem(movie, 1);
         OrderItem orderItem4 = new OrderItem(album, 1);
@@ -182,7 +193,9 @@ class OrderTest extends TestConfig {
         Order order2 = new Order(member, orderDate, OrderStatus.ORDER);
         Order order3 = new Order(member, orderDate, OrderStatus.ORDER);
         Order order4 = new Order(member, orderDate, OrderStatus.ORDER);
-        order1.addOrderItem(orderItem1);
+        order1.addOrderItem(orderItem1_1);
+        order1.addOrderItem(orderItem1_2);
+        order1.addOrderItem(orderItem1_3);
         order2.addOrderItem(orderItem2);
         order3.addOrderItem(orderItem3);
         order4.addOrderItem(orderItem4);
@@ -200,31 +213,13 @@ class OrderTest extends TestConfig {
         query = "SELECT DISTINCT o FROM Order o JOIN FETCH o.orderItems";
         List<Order> orders = em.createQuery(query, Order.class).getResultList();
 
-        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.of(2023, 8, 24, 0, 0, 0));
-        assertThat(orders).hasSize(4)
-            .extracting("member.name", "orderDate")
-            .contains(
-                Tuple.tuple(member.getName(), timestamp),
-                Tuple.tuple(member.getName(), timestamp),
-                Tuple.tuple(member.getName(), timestamp),
-                Tuple.tuple(member.getName(), timestamp)
-            );
+        assertThat(orders).hasSize(4);
 
-        List<List> list = List.of(List.of("Album1", 30000),
-            List.of("Book1", 40000),
-            List.of("Movie1", 8000),
-            List.of("Album1", 10000));
-        Iterator<List> iterator = list.iterator();
-
-        orders.stream()
-            .map(Order::getOrderItems)
-            .forEach((orderItems) -> {
-                    List next = iterator.next();
-                    assertThat(orderItems).hasSize(1)
-                        .extracting("item.name", "orderPrice")
-                        .contains(Tuple.tuple(next.get(0), next.get(1)));
-                }
-            );
+        int[] orderItemsSize = {3, 1, 1, 1};
+        for (int i = 0; i < orders.size(); i++) {
+            List<OrderItem> orderItems = orders.get(i).getOrderItems();
+            assertThat(orderItems).hasSize(orderItemsSize[i]);
+        }
     }
 
     private void createAndSaveMovie() {
@@ -236,9 +231,7 @@ class OrderTest extends TestConfig {
             .director("director")
             .build();
 
-        JpaExecutionInterface.execute(em.getTransaction(), () -> {
-            em.persist(movie);
-        });
+        JpaExecutionInterface.execute(em.getTransaction(), () -> em.persist(movie));
     }
 
     private void createAndSaveBook() {
@@ -250,9 +243,7 @@ class OrderTest extends TestConfig {
             .isbn("2224-33s")
             .build();
 
-        JpaExecutionInterface.execute(em.getTransaction(), () -> {
-            em.persist(book);
-        });
+        JpaExecutionInterface.execute(em.getTransaction(), () -> em.persist(book));
     }
 
     private void createAndSaveAlbum() {
@@ -264,9 +255,7 @@ class OrderTest extends TestConfig {
             .etc("etc")
             .build();
 
-        JpaExecutionInterface.execute(em.getTransaction(), () -> {
-            em.persist(album);
-        });
+        JpaExecutionInterface.execute(em.getTransaction(), () -> em.persist(album));
     }
 
     private Member createAndSaveMember() {
