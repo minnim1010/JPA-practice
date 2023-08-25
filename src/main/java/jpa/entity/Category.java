@@ -15,6 +15,7 @@ public class Category {
     @Id
     @GeneratedValue
     private Long id;
+
     private String name;
 
     @ManyToMany
@@ -27,6 +28,7 @@ public class Category {
     @ManyToOne
     @JoinColumn(name="PARENT_ID")
     private Category parent;
+
     @OneToMany(mappedBy = "parent")
     private List<Category> child = new ArrayList<>();
 
